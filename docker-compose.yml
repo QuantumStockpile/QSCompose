@@ -1,4 +1,18 @@
 services:
+  users_ms:
+    build: ./QSUsers
+    ports:
+      - "8000:8000"
+    environment:
+      ACCESS_TOKEN_EXPIRE_MINUTES: ${ACCESS_TOKEN_EXPIRE_MINUTES}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      JWT_ALGORITHM: ${JWT_ALGORITHM}
+      DATABASE_URL: "asyncpg://${DB_USER}:${DB_PASSWORD}@qs_db:5432/${DB_NAME}"
+    networks:
+      - backend
+    depends_on:
+      - qs_db
+
   qs_db:
     image: postgres:14-alpine
     environment:

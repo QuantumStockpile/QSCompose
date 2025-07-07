@@ -1,0 +1,3 @@
+[submodule "QSUsers"]
+	path = QSUsers
+	url = git@github.com:QuantumStockpile/QSUsers.git
