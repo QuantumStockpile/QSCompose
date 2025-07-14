@@ -10,6 +10,7 @@ services:
       REFRESH_TOKEN_EXPIRE_DAYS: ${REFRESH_TOKEN_EXPIRE_DAYS}
       JWT_ALGORITHM: ${JWT_ALGORITHM}
       DATABASE_URL: "asyncpg://${DB_USER}:${DB_PASSWORD}@qs_db:5432/${DB_NAME}"
+      IS_PRODUCTION: ${IS_PRODUCTION}
     networks:
       - backend
     depends_on:
