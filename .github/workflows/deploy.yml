@@ -14,10 +14,16 @@ jobs:
       - name: Setup SSH key
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.SERVER_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
+          touch ~/.ssh/known_hosts
+          chmod 700 ~/.ssh
+          chmod 600 ~/.ssh/known_hosts
+
+          # Add your server to known hosts
           ssh-keyscan -H "${{ secrets.SERVER_HOST }}" >> ~/.ssh/known_hosts
 
+          # Load private key securely
+          eval "$(ssh-agent -s)"
+          ssh-add <(echo "${{ secrets.SERVER_SSH_PRIVATE_KEY }}")      
       - name: Deploy to server
         run: |
           ssh -o StrictHostKeyChecking=yes "${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}" << 'EOF'
