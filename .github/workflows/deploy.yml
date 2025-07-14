@@ -1,0 +1,33 @@
+name: Build & Deploy via SSH
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SERVER_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H "${{ secrets.SERVER_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Deploy to server
+        run: |
+          ssh -o StrictHostKeyChecking=yes "${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}" << 'EOF'
+            cd "${{ secrets.SERVER_APP_DIR }}"
+            if [ ! -d .git ]; then
+              git clone --depth 1 --branch main "${{ secrets.REPO_SSH_URL }}" .
+            else
+              git fetch origin && git reset --hard origin/main
+            fi
+            docker compose pull --ignore-pull-failures || true
+            docker compose build
+            docker compose up -d --remove-orphans
+          EOF
