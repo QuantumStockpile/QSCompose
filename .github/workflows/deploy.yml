@@ -9,28 +9,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
 
-      - name: Print debug info
-        run: |
-          echo "Host: ${{ secrets.SERVER_HOST }}"
-          echo "User: ${{ secrets.SERVER_USER }}"
-          echo "App Dir: ${{ secrets.SERVER_APP_DIR }}"
-          echo "Repo: ${{ secrets.REPO_SSH_URL }}"
+      - name: Setup SSH Agent
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SERVER_SSH_PRIVATE_KEY }}
 
-      - name: Setup SSH key
-        run: |
-          mkdir -p ~/.ssh
-          touch ~/.ssh/known_hosts
-          chmod 700 ~/.ssh
-          chmod 600 ~/.ssh/known_hosts
-
-          # Add your server to known hosts
-          ssh-keyscan -H "${{ secrets.SERVER_HOST }}" >> ~/.ssh/known_hosts
-
-          # Load private key securely
-          eval "$(ssh-agent -s)"
-          ssh-add <(echo "${{ secrets.SERVER_SSH_PRIVATE_KEY }}")      
       - name: Deploy to server
         run: |
           ssh -o StrictHostKeyChecking=yes "${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}" << 'EOF'
