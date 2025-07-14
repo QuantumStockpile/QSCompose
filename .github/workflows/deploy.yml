@@ -11,6 +11,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Print debug info
+        run: |
+          echo "Host: ${{ secrets.SERVER_HOST }}"
+          echo "User: ${{ secrets.SERVER_USER }}"
+          echo "App Dir: ${{ secrets.SERVER_APP_DIR }}"
+          echo "Repo: ${{ secrets.REPO_SSH_URL }}"
+
       - name: Setup SSH key
         run: |
           mkdir -p ~/.ssh
