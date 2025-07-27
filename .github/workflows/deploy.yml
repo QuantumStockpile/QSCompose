@@ -23,7 +23,7 @@ jobs:
           script: |
             mkdir -p "${{ secrets.SERVER_APP_DIR }}" && cd $_ 
             if [ ! -d .git ]; then
-              git clone --depth 1 --branch main "${{ secrets.REPO_SSH_URL }}" .
+              git clone --recursive main "${{ secrets.REPO_SSH_URL }}" .
             else
               git fetch origin && git reset --hard origin/main
             fi
