@@ -4,3 +4,6 @@
 [submodule "QSInventory"]
 	path = QSInventory
 	url = git@github.com:QuantumStockpile/QSInventory.git
+[submodule "QSRequests"]
+	path = QSRequests
+	url = git@github.com:QuantumStockpile/QSRequests.git
