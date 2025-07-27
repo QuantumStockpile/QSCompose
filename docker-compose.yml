@@ -21,7 +21,7 @@ services:
     ports:
       - "8001:8000"
     environment:
-      USERSMS_URL: "users_ms"
+      USERSMS_URL: "http://users_ms:8000"
       DB_URL: "asyncpg://${DB_USER}:${DB_PASSWORD}@qs_db:5432/${DB_NAME}"
     networks:
       - backend
@@ -34,7 +34,7 @@ services:
     ports:
       - "8002:8000"
     environment:
-      USERSMS_URL: "users_ms"
+      USERSMS_URL: "http://users_ms:8000"
       DB_URL: "asyncpg://${DB_USER}:${DB_PASSWORD}@qs_db:5432/${DB_NAME}"
     networks:
       - backend
